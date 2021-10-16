@@ -43,6 +43,3 @@ class Platformer(arcade.Window):
         # self.victory_sound = arcade.load_sound(
         #    str(ASSETS_PATH / "sounds" / "victory.wav")
         # )
-    
-Platformer()
-arcade.run()
