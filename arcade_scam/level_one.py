@@ -1,14 +1,8 @@
 import arcade
 import pathlib
-from window_game import ASSET_PATH
+from window_game import *
 
-# Scaling constants
-MAP_SCALING = 1.0
 
-#Player constants
-GRAVITY = 1.0
-PLAYER_START_X = 65
-PLAYER_START_Y = 256
 
 def setup(self) -> None:
     """For setting up Level"""
@@ -43,6 +37,11 @@ def setup(self) -> None:
         background_color = game_map.background_color
     arcade.set_background_color(background_color)
 
+
+    self.map_width = (
+        game_map.map_size.width-1
+    )* game_map.tile_size.width
+
 #Create the player sprite if they're not already set up
     if not self.player:
         self.player = self.create_player_sprite()
@@ -52,6 +51,10 @@ def setup(self) -> None:
     self.player.center_y = PLAYER_START_Y
     self.player.change_x = 0
     self.player.change_y = 0
+
+#Reset window
+    self.view_left = 0
+    self.view_right = 0
 
 #Load the physics engine for this map
     self.physics_engine = arcade.PhysicsEnginePlatformer(

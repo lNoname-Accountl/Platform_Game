@@ -7,18 +7,15 @@ def create_player_sprite(self) -> arcade.AnimatedWalkingSprite:
     path_texture = ASSET_PATH / "images" / "player"
 
     path_walking = [
-        path_texture /
+        path_texture / f"Run({x}).png" for x in (1, 7)
     ]
 
-    path_walking = [
-        path_texture /
-    ]
 
     path_climbing = [
-        path_texture /
+        path_texture / f"Climb_00{x}.png" for x in (0, 9)
     ]
 
-    path_standing = path_texture /
+    path_standing = path_texture / f"Idle(5).png"
 
     texture_walking_right = [
         arcade.load_texture(texture) for texture in path_walking
