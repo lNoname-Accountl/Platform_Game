@@ -207,6 +207,7 @@ class Platformer(arcade.Window):
         
         self.end_of_map = 0
         
+        # Initial level
         self.level = 1
 
         #Load Sounds
@@ -225,7 +226,7 @@ class Platformer(arcade.Window):
         self.gui_camera = arcade.Camera(self.width, self.height)
 
         #Set the map 
-        map_path = "testMapReal.json"
+        map_path = "level1.json"
         map_name = ASSETS_PATH / map_path
         
         #Layer Specific Options for the map
@@ -281,7 +282,7 @@ class Platformer(arcade.Window):
                 cartesian[0] * TILE_SCALING * self.tile_map.tile_width
             )
             enemy.center_y = math.floor(
-            (cartesian[1] + 0.75)*(self.tile_map.tile_height*TILE_SCALING)
+            (cartesian[1] + 1.2 )*(self.tile_map.tile_height*TILE_SCALING)
             )
             if "boundary_left" in my_object.properties:
                 enemy.boundary_left = my_object.properties["boundary_left"]
