@@ -6,7 +6,7 @@ class Map:
     def __init__(self):
 
         
-        map_path = "level1.json"
+        map_path = "level5.json"
         map_name = ASSETS_PATH / map_path
         
         self.layer_options ={

@@ -7,12 +7,13 @@ from imap import *
 from scene import *
 from physicEngine import *
 from camera import *
+from gameover import *
 
-class Platformer(arcade.Window):  
+class Platformer(arcade.View):  
     def __init__(self):
         
         #Call the parent class and set up the window
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLES)
+        super().__init__()
 
         #Set the path to start the progoram
         file_path = os.path.dirname(os.path.abspath(__file__))
@@ -157,6 +158,13 @@ class Platformer(arcade.Window):
         #Move player with physic engine
         self.dengine.pengine.update()
 
+        if self.player.center_y < -100:
+            self.player.center_x = PLAYER_X
+            self.player.center_y = PLAYER_Y
+            arcade.play_sound(self.game_over)
+            self.score -= 10
+            
+
         #Update animation
         if self.dengine.pengine.can_jump():
             self.player.can_jump = False
@@ -236,8 +244,8 @@ class Platformer(arcade.Window):
             #Check how many points this is worth
             if self.dscene.scene.get_sprite_list(LAYER_NAME_ENEMIES) in collision.sprite_lists:
                 arcade.play_sound(self.game_over)
-                self.setup()
-                return
+                gameover = GameOver(self)
+                self.window.show_view(gameover)
             else:
 
                 if "Points" not in collision.properties: 
