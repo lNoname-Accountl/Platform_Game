@@ -67,7 +67,7 @@ class Entity(arcade.Sprite):
             self.idle_texture_pair = load_texture_pair(f"{main_path}_idle.png")
             self.jump_texture_pair = load_texture_pair(f"{main_path}_jump.png")
             self.fall_texture_pair = load_texture_pair(f"{main_path}_fall.png")
-
+  
             #Character walking textures
             self.walk_textures = []
             for i in range(8):
