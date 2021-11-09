@@ -32,6 +32,7 @@ LAYER_NAME_MOVING = "Moving Platforms"
 LAYER_NAME_LADDERS = "Ladders"
 LAYER_NAME_PLAYER = "Player"
 LAYER_NAME_ENEMIES = "Enemies"
+LAYER_NAME_GOAL = "Goal"
 
 ASSETS_PATH = pathlib.Path(__file__).resolve().parent / "assets"
 file_path = os.path.dirname(os.path.abspath(__file__))

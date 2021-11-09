@@ -235,6 +235,7 @@ class Platformer(arcade.View):
             [
                 self.dscene.scene.get_sprite_list(LAYER_NAME_COINS),
                 self.dscene.scene.get_sprite_list(LAYER_NAME_ENEMIES),
+                self.dscene.scene.get_sprite_list(LAYER_NAME_GOAL),
             ],
         )
 
@@ -246,6 +247,10 @@ class Platformer(arcade.View):
                 arcade.play_sound(self.game_over)
                 gameover = GameOver(self)
                 self.window.show_view(gameover)
+
+            elif self.dscene.scene.get_sprite_list(LAYER_NAME_GOAL) in collision.sprite_lists:
+                self.dmap.level+= 1
+                self.setup()
             else:
 
                 if "Points" not in collision.properties: 
