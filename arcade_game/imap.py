@@ -7,6 +7,7 @@ class Map:
 
 
         self.level = 1
+        
         map_path = None
         map_name = None
         
