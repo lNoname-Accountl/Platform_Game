@@ -34,7 +34,8 @@ class Platformer(arcade.View):
         self.player = None
         
         self.score = 0
-        
+        self.timer = 0
+        self.show = "00"
         
         # Initial level
         self.level = 1
@@ -48,7 +49,8 @@ class Platformer(arcade.View):
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
     
     def setup(self):
-        self.score = 0
+        self.score = self.score
+        self.timer = 40
         self.player = Player()
         self.dmap.map = self.dmap.get_map()
         self.dcamera.gui_camera = self.dcamera.set_camera()
@@ -78,6 +80,14 @@ class Platformer(arcade.View):
         arcade.draw_text(
             score_text,
             10,
+            10,
+            arcade.csscolor.WHITE,
+            18,
+        )
+
+        arcade.draw_text(
+            self.show,
+            1000,
             10,
             arcade.csscolor.WHITE,
             18,
@@ -157,12 +167,10 @@ class Platformer(arcade.View):
 
         #Move player with physic engine
         self.dengine.pengine.update()
-
-        if self.player.center_y < -100:
-            self.player.center_x = PLAYER_X
-            self.player.center_y = PLAYER_Y
-            arcade.play_sound(self.game_over)
-            self.score -= 10
+        self.timer -= delta_time
+        second = int(self.timer) % 60
+        self.show = f"Time : {second:02d}"
+        
             
 
         #Update animation
@@ -239,18 +247,29 @@ class Platformer(arcade.View):
             ],
         )
 
+
+
+        if self.timer < 0:
+            self.timer = 0
+        if self.player.center_y < -100 or second == 0:
+            self.score = 0
+            arcade.play_sound(self.game_over)
+            gameover = GameOver(self)
+            self.window.show_view(gameover)
+
         #Loop through each coin character hit and remove coins
         for collision in player_collision_list:
 
             #Check how many points this is worth
             if self.dscene.scene.get_sprite_list(LAYER_NAME_ENEMIES) in collision.sprite_lists:
+                self.score = 0
                 arcade.play_sound(self.game_over)
                 gameover = GameOver(self)
                 self.window.show_view(gameover)
 
             elif self.dscene.scene.get_sprite_list(LAYER_NAME_GOAL) in collision.sprite_lists:
                 self.dmap.level+= 1
-                self.setup()
+                self.setup(self.score)
             else:
 
                 if "Points" not in collision.properties: 

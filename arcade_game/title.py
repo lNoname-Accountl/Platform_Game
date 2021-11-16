@@ -45,7 +45,8 @@ class Title(arcade.View):
             game_view = Platformer()
             game_view.setup()
             self.window.show_view(game_view)
-    
+
+
 
 
 
