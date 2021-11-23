@@ -33,7 +33,7 @@ class Title(arcade.View):
 
         if self.show:
             arcade.draw_text(
-               "Press Enter to Start",
+               "Press Enter to Start | ESC to Exit",
                 start_x= 115,
                 start_y = 320,
                 color = arcade.color.INDIGO,
@@ -45,7 +45,8 @@ class Title(arcade.View):
             game_view = Platformer()
             game_view.setup()
             self.window.show_view(game_view)
-
+        elif key == arcade.key.ESCAPE:
+            arcade.close_window()     
 
 
 

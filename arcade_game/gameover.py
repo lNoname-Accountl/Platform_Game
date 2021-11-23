@@ -35,8 +35,8 @@ class GameOver(arcade.View):
 
         if self.show:
             arcade.draw_text(
-               "Press Enter to Play again",
-                start_x= 340,
+               "Press Enter to Play again | ESC to exit",
+                start_x= 200,
                 start_y = 220,
                 color = arcade.color.WHITE,
                 font_size = 40,
@@ -46,6 +46,8 @@ class GameOver(arcade.View):
         if key == arcade.key.RETURN:
             self.game_view.setup()
             self.window.show_view(self.game_view)
+        elif key == arcade.key.ESCAPE:
+            arcade.close_window()
 
 
 

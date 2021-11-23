@@ -8,6 +8,7 @@ from scene import *
 from physicEngine import *
 from camera import *
 from gameover import *
+from victory import *
 
 class Platformer(arcade.View):  
     def __init__(self):
@@ -18,6 +19,8 @@ class Platformer(arcade.View):
         #Set the path to start the progoram
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
+
+        songpath = ASSETS_PATH / "Summer_Smile.mp3"
 
         # Track current state to see that what key is pressed
         self.dmap = Map()
@@ -44,13 +47,17 @@ class Platformer(arcade.View):
         self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav") #Coin sound
         self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav") #Jump Sound
         self.game_over = arcade.load_sound(":resources:sounds/gameover1.wav")
+        self.win = arcade.load_sound(":resources:sounds/upgrade5.wav")
+        self.song = arcade.load_sound(songpath)
 
         #Set background color
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
+
+        arcade.play_sound(self.song, volume = 0.01, looping = True)  #Playing background music
     
     def setup(self):
         self.score = self.score
-        self.timer = 40
+        self.timer = 60
         self.player = Player()
         self.dmap.map = self.dmap.get_map()
         self.dcamera.gui_camera = self.dcamera.set_camera()
@@ -87,7 +94,7 @@ class Platformer(arcade.View):
 
         arcade.draw_text(
             self.show,
-            1000,
+            1100,
             10,
             arcade.csscolor.WHITE,
             18,
@@ -163,10 +170,11 @@ class Platformer(arcade.View):
         self.dcamera.camera.move_to(player_centered, 0.2)
 
     def on_update(self, delta_time):
-        #Movement and game logic
+        #Movement and game logic 
 
         #Move player with physic engine
         self.dengine.pengine.update()
+
         self.timer -= delta_time
         second = int(self.timer) % 60
         self.show = f"Time : {second:02d}"
@@ -268,8 +276,14 @@ class Platformer(arcade.View):
                 self.window.show_view(gameover)
 
             elif self.dscene.scene.get_sprite_list(LAYER_NAME_GOAL) in collision.sprite_lists:
-                self.dmap.level+= 1
-                self.setup(self.score)
+                if self.dmap.level == 5:
+                    arcade.play_sound(self.win)
+                    victory = Victory(self.score, self)
+                    self.window.show_view(victory)
+                else:
+                    arcade.play_sound(self.win)
+                    self.dmap.level+= 1
+                    self.setup()
             else:
 
                 if "Points" not in collision.properties: 

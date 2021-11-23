@@ -2,7 +2,6 @@ import arcade
 from constant import *
 from platformer import Platformer
 from title import *
-from menu import *
 
 def main():
     window = arcade.Window(
@@ -10,7 +9,7 @@ def main():
         height = SCREEN_HEIGHT,
         title = SCREEN_TITLES,
     )
-    title_view = MenuStart()
+    title_view = Title()
     window.show_view(title_view)
     arcade.run()
     
