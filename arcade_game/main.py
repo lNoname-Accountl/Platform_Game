@@ -3,6 +3,7 @@ from constant import *
 from platformer import Platformer
 from title import *
 
+#Main function of the program
 def main():
     window = arcade.Window(
         width = SCREEN_WIDTH,

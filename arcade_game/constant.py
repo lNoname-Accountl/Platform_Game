@@ -13,7 +13,7 @@ COIN_SCALING = 0.5
 SPRITE_PIXEL_SIZE = 128
 GRID_PIXEL_SIZE = SPRITE_PIXEL_SIZE * TILE_SCALING
 
-#Set movement character speed
+#Set our character movement speed 
 PLAYER_MOVEMENT_SPEED = 5
 GRAVITY = 1
 PLAYER_JUMP_SPEED = 20
@@ -21,7 +21,7 @@ PLAYER_JUMP_SPEED = 20
 PLAYER_X = SPRITE_PIXEL_SIZE * TILE_SCALING * 2
 PLAYER_Y = SPRITE_PIXEL_SIZE * TILE_SCALING * 1
 
-#Camera tracking player
+#Make the camera to tracking the character
 RIGHT_FACING = 0
 LEFT_FACING = 1
 

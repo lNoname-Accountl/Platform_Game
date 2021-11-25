@@ -3,14 +3,15 @@ import arcade
 from constant import *
 from enemy import *
 
-
+#Scene class that's used for adding player and enemies into the scene
 class Scene():
         def __init__(self):
             self.scene = None
-
+        #Function that will add player sprite into the scene
         def addPlayer(self, player):
             self.scene.add_sprite(LAYER_NAME_PLAYER, player)
 
+        #Function that will add enemy sprite into the scene
         def addEnemy(self, gmap):
             enemies_layer = gmap.object_lists[LAYER_NAME_ENEMIES]
             for my_object in enemies_layer:
@@ -40,5 +41,6 @@ class Scene():
                     enemy.change_x  = my_object.properties["change_x"]
                 self.scene.add_sprite(LAYER_NAME_ENEMIES,enemy)
 
+        #Return the scene that has been initiated
         def getScene(self, map):
             return arcade.Scene.from_tilemap(map)

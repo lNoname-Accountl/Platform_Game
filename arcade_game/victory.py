@@ -1,10 +1,11 @@
 import arcade
 from constant import *
-
+#Class for Victory view when player reach the goal in the last stage
 class Victory(arcade.View):
     def __init__(self, score, game_view: arcade.View):
         super().__init__()
 
+        #Load victory picture
         victory_path = ASSETS_PATH / "victory.png"
 
         self.victory = arcade.load_texture(victory_path)
@@ -13,15 +14,8 @@ class Victory(arcade.View):
         self.game_view = game_view
         self.score = score
 
-        
     
-    def on_update(self, delta_time: float):
-        self.timer -= delta_time
-        
-        if self.timer < 0:
-            self.show = not self.show
-            self.timer = 1
-    
+    #For drawing the background image and the player score
     def on_draw(self):
 
         arcade.start_render()
@@ -33,7 +27,8 @@ class Victory(arcade.View):
               height = SCREEN_HEIGHT,
               texture = self.victory,
         )
-
+        
+        #Show the player score
         score_text = f"Your score: {self.score}"
         arcade.draw_text(
             score_text,
@@ -43,7 +38,7 @@ class Victory(arcade.View):
             font_size = 40,
         )
             
-    
+    #When the user press ESC it will close the game 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:
             arcade.close_window()

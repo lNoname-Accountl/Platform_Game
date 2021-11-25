@@ -1,6 +1,7 @@
 import arcade
 from constant import *
 
+#Class for initializing map to set the level
 class Map:
 
     def __init__(self):
@@ -16,14 +17,17 @@ class Map:
 
         self.end_map = None
     
+    #Set the background color
     def set_background(self):
         if self.map.tiled_map.background_color:
             arcade.set_background_color(self.map.tiled_map.background_color)
 
+    #Loading map in each stage
     def get_map(self):
         map_path = f"level{self.level}.json"
         map_name = ASSETS_PATH / map_path
         
+        #Setting the layer that player can interact with
         self.layer_options ={
             LAYER_NAME_PLATFORMS : {
                 "use_spatial_hash" : True,
@@ -41,7 +45,10 @@ class Map:
                 "use_spatial_hash": True,
             }
         }
+        #Load the JSON file, with scaling of the tile and the layer option we set
         self.map = arcade.load_tilemap(map_name, TILE_SCALING, self.layer_options)
 
+        #Calculating the end of the map
         self.end_map = self.map.tiled_map.map_size.width * GRID_PIXEL_SIZE
+        #Return the map to the function that called it
         return self.map

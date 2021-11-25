@@ -10,19 +10,21 @@ from camera import *
 from gameover import *
 from victory import *
 
-class Platformer(arcade.View):  
+
+class Platformer(arcade.View):
     def __init__(self):
-        
-        #Call the parent class and set up the window
+
+        # Call the parent class and set up the window
         super().__init__()
 
-        #Set the path to start the progoram
+        # Set the path to start the progoram
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
+        # Set the path for the song
         songpath = ASSETS_PATH / "Summer_Smile.mp3"
 
-        # Track current state to see that what key is pressed
+        # Initializing necessary components
         self.dmap = Map()
         self.dscene = Scene()
         self.dengine = PhysicsEngine()
@@ -35,26 +37,32 @@ class Platformer(arcade.View):
         self.jump_needs_reset = False
 
         self.player = None
-        
+
         self.score = 0
         self.timer = 0
         self.show = "00"
-        
+
         # Initial level
         self.level = 1
 
-        #Load Sounds
-        self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav") #Coin sound
-        self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav") #Jump Sound
-        self.game_over = arcade.load_sound(":resources:sounds/gameover1.wav")
-        self.win = arcade.load_sound(":resources:sounds/upgrade5.wav")
-        self.song = arcade.load_sound(songpath)
+        # Load Sounds that will use in the game
+        self.collect_coin_sound = arcade.load_sound(
+            ":resources:sounds/coin1.wav")  # Coin sound
+        self.jump_sound = arcade.load_sound(
+            ":resources:sounds/jump1.wav")  # Jump Sound
+        self.game_over = arcade.load_sound(
+            ":resources:sounds/gameover1.wav")  # Gameover sound
+        self.win = arcade.load_sound(
+            ":resources:sounds/upgrade5.wav")  # Stage clear sound
+        self.song = arcade.load_sound(songpath)  # Background Sound
 
-        #Set background color
+        # Set background color
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
-        arcade.play_sound(self.song, volume = 0.01, looping = True)  #Playing background music
-    
+        # Playing background sound ,set volume and looping
+        arcade.play_sound(self.song, volume=0.01, looping=True)
+
+    # Set up the variables for class 'Platformer'
     def setup(self):
         self.score = self.score
         self.timer = 60
@@ -67,22 +75,23 @@ class Platformer(arcade.View):
         self.dscene.addEnemy(self.dmap.map)
         self.dmap.set_background()
         self.dengine.startEngine(self.player, self.dscene.scene)
-      
+
+    # For drawing necessary components on the screen
     def on_draw(self):
-        
-        #Clear the screen to the background color
+
+        # Clear the screen to the background color
         arcade.start_render()
 
-        #Activate game camera
+        # Activate game camera
         self.dcamera.camera.use()
 
-        #Draw our scene
+        # Draw our scene
         self.dscene.scene.draw()
 
-        #Activate the GUI camera 
+        # Activate the GUI camera
         self.dcamera.gui_camera.use()
 
-        #Draw the score on the screen
+        # Draw the score on the screen
         score_text = f"Score: {self.score}"
         arcade.draw_text(
             score_text,
@@ -91,7 +100,7 @@ class Platformer(arcade.View):
             arcade.csscolor.WHITE,
             18,
         )
-
+        # Draw the timer on the screen
         arcade.draw_text(
             self.show,
             1100,
@@ -99,10 +108,11 @@ class Platformer(arcade.View):
             arcade.csscolor.WHITE,
             18,
         )
+    # Process between key change from keyboard
 
     def process_keychange(self):
-        
-        #Process up/down
+
+        # Process up/down to ensure that player will follow the control  vertically
         if self.up_pressed and not self.down_pressed:
             if self.dengine.pengine.is_on_ladder():
                 self.player.change_y = PLAYER_MOVEMENT_SPEED
@@ -116,15 +126,15 @@ class Platformer(arcade.View):
         elif self.down_pressed and not self.up_pressed:
             if self.dengine.pengine.is_on_ladder():
                 self.player.change_y = -PLAYER_MOVEMENT_SPEED
-        
-        # Process up/down when on a Ladder and no movement
+
+        # Process up/down when on a Ladder and ensure that there are no movement
         if self.dengine.pengine.is_on_ladder():
             if not self.up_pressed and not self.down_pressed:
                 self.player.change_y = 0
             elif self.up_pressed and self.down_pressed:
                 self.player.change_y = 0
 
-        #Process Left and Right
+        # Process Left and Right movement
         if self.right_pressed and not self.left_pressed:
             self.player.change_x = PLAYER_MOVEMENT_SPEED
         elif self.left_pressed and not self.right_pressed:
@@ -133,7 +143,7 @@ class Platformer(arcade.View):
             self.player.change_x = 0
 
     def on_key_press(self, key, modifiers):
-        #Called when a key is pressed.
+        # Called when a key is pressed.
         if key == arcade.key.UP or key == arcade.key.W:
             self.up_pressed = True
         elif key == arcade.key.DOWN or key == arcade.key.S:
@@ -145,7 +155,7 @@ class Platformer(arcade.View):
         self.process_keychange()
 
     def on_key_release(self, key, modifiers):
-        #Called when a key is release
+        # Called when a key is release
         if key == arcade.key.UP or key == arcade.key.W:
             self.up_pressed = False
             self.jump_needs_reset = False
@@ -156,10 +166,13 @@ class Platformer(arcade.View):
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.right_pressed = False
         self.process_keychange()
-            
+
+    # Function to set that the camera will be at the player at all time
     def center_camera_to_player(self):
-        screen_center_x = self.player.center_x - (self.dcamera.camera.viewport_width / 2)
-        screen_center_y = self.player.center_y - (self.dcamera.camera.viewport_height / 2)
+        screen_center_x = self.player.center_x - \
+            (self.dcamera.camera.viewport_width / 2)
+        screen_center_y = self.player.center_y - \
+            (self.dcamera.camera.viewport_height / 2)
 
         if screen_center_x < 0:
             screen_center_x = 0
@@ -169,24 +182,25 @@ class Platformer(arcade.View):
 
         self.dcamera.camera.move_to(player_centered, 0.2)
 
+    # Function for updating necessary components that need to be update
     def on_update(self, delta_time):
-        #Movement and game logic 
+        # Movement and game logic
 
-        #Move player with physic engine
+        # Move player with physic engine
         self.dengine.pengine.update()
 
+        # Initiate the timer with delta time
         self.timer -= delta_time
         second = int(self.timer) % 60
         self.show = f"Time : {second:02d}"
-        
-            
 
-        #Update animation
+        # For checking player jumping activity to ensure that player is jumping or not
         if self.dengine.pengine.can_jump():
             self.player.can_jump = False
-        else:                                                                                                             
+        else:
             self.player.can_jump = True
 
+        # For cheking player ladder activity to ensure that player is on it or not
         if self.dengine.pengine.is_on_ladder() and not self.dengine.pengine.can_jump():
             self.player.is_on_ladder = True
             self.process_keychange()
@@ -194,20 +208,21 @@ class Platformer(arcade.View):
             self.player.is_on_ladder = False
             self.process_keychange()
 
+        # For the components that require animation update
         self.dscene.scene.update_animation(
-            delta_time, 
+            delta_time,
             [
                 LAYER_NAME_COINS,
-                LAYER_NAME_BACKGROUND, 
-                LAYER_NAME_PLAYER, 
+                LAYER_NAME_BACKGROUND,
+                LAYER_NAME_PLAYER,
                 LAYER_NAME_ENEMIES,
-                ],
+            ],
         )
 
-        #Update walls, used with moving platforms
+        # Update walls, used with moving platforms
         self.dscene.scene.update([LAYER_NAME_MOVING, LAYER_NAME_ENEMIES])
-        
-        #See if the enemy hit a boundary then it reverse
+
+        # See if the enemy hit a boundary then it reverse the direction
         for enemy in self.dscene.scene.get_sprite_list(LAYER_NAME_ENEMIES):
             if(
                 enemy.boundary_right
@@ -215,15 +230,15 @@ class Platformer(arcade.View):
                 and enemy.change_x > 0
             ):
                 enemy.change_x *= -1
-                
+
             if(
                 enemy.boundary_left
                 and enemy.left < enemy.boundary_left
                 and enemy.change_x < 0
             ):
                 enemy.change_x *= -1
-                    
-        #See if the moving wall hit a boundary and reverse
+
+        # See if the moving wall hit a boundary and reverse the direction
         for wall in self.dscene.scene.get_sprite_list(LAYER_NAME_MOVING):
             if (
                 wall.boundary_right
@@ -244,10 +259,11 @@ class Platformer(arcade.View):
                 and wall.bottom < wall.boundary_bottom
                 and wall.change_y < 0
             ):
-                wall.change_y *= -1    
-        
+                wall.change_y *= -1
+
+        # Create a list of object that player can collide with
         player_collision_list = arcade.check_for_collision_with_lists(
-            self.player, 
+            self.player,
             [
                 self.dscene.scene.get_sprite_list(LAYER_NAME_COINS),
                 self.dscene.scene.get_sprite_list(LAYER_NAME_ENEMIES),
@@ -255,8 +271,7 @@ class Platformer(arcade.View):
             ],
         )
 
-
-
+        # If timer reach 0 or player fall, they will lose
         if self.timer < 0:
             self.timer = 0
         if self.player.center_y < -100 or second == 0:
@@ -265,16 +280,17 @@ class Platformer(arcade.View):
             gameover = GameOver(self)
             self.window.show_view(gameover)
 
-        #Loop through each coin character hit and remove coins
+        # Loop through each coin character hit and remove coins
         for collision in player_collision_list:
 
-            #Check how many points this is worth
+            # Check if player collide with the enemy or not, if yes then game over
             if self.dscene.scene.get_sprite_list(LAYER_NAME_ENEMIES) in collision.sprite_lists:
                 self.score = 0
                 arcade.play_sound(self.game_over)
                 gameover = GameOver(self)
                 self.window.show_view(gameover)
 
+            # Check if player collide with the goal or not, if yes move to the next stage or victory screen
             elif self.dscene.scene.get_sprite_list(LAYER_NAME_GOAL) in collision.sprite_lists:
                 if self.dmap.level == 5:
                     arcade.play_sound(self.win)
@@ -282,19 +298,20 @@ class Platformer(arcade.View):
                     self.window.show_view(victory)
                 else:
                     arcade.play_sound(self.win)
-                    self.dmap.level+= 1
+                    self.dmap.level += 1
                     self.setup()
+            # Check if player collide with the coin or not, if yes add the score, or show that there are not properties
             else:
 
-                if "Points" not in collision.properties: 
-                   print("Warning, collected a coin without a Points property.")
+                if "Points" not in collision.properties:
+                    print("Warning, collected a coin without a Points property.")
                 else:
                     points = int(collision.properties["Points"])
                     self.score += points
 
-                #Remove the coin
+                # Remove the coin from the scene
                 collision.remove_from_sprite_lists()
                 arcade.play_sound(self.collect_coin_sound)
 
-        #Position the camera
+        # Position the camera
         self.center_camera_to_player()

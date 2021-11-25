@@ -1,6 +1,6 @@
 from entity import *
  
-
+#Player class which accept Entity as an argument for showing animation of the character
 class Player(Entity):
 
     def __init__(self):
@@ -13,16 +13,16 @@ class Player(Entity):
         self.center_x = PLAYER_X
         self.center_y = PLAYER_Y
 
-
+    #Function for update animation of the player
     def update_animation(self, delta_time: float = 1/60):
         
-        #Flip face left or right
+        #Flip face of character left or right
         if self.change_x < 0 and self.character_face_direction == RIGHT_FACING:
             self.character_face_direction = LEFT_FACING
         elif self.change_x > 0 and self.character_face_direction == LEFT_FACING:
             self.character_face_direction = RIGHT_FACING
 
-        # Climbing animation
+        # Climbing animation which will increase until it need reset when player climb ladder
         if self.is_on_ladder:
             self.climbing = True
         if not self.is_on_ladder and self.climbing:
@@ -35,7 +35,7 @@ class Player(Entity):
             self.texture = self.climbing_textures[self.cur_texture // 4]
             return
             
-        #Jumping animation    
+        #Jumping animation when player jump  
         if self.change_y > 0 and not self.is_on_ladder:
             self.texture = self.jump_texture_pair[self.character_face_direction]
             return
