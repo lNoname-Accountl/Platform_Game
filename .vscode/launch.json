@@ -5,11 +5,13 @@
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
       "request": "launch",
-      "args": [],
+      "args": [
+        ""
+      ],
       "stopAtEntry": false,
-      "cwd": "c:\\Users\\tar_j\\Desktop\\Platform_Game",
+      "cwd": "c:/Users/tar_j/Desktop/Platform_Game",
       "environment": [],
-      "program": "c:\\Users\\tar_j\\Desktop\\Platform_Game\\build\\Debug\\outDebug",
+      "program": "c:/Users/tar_j/Desktop/Platform_Game/build/Debug/outDebug",
       "internalConsoleOptions": "openOnSessionStart",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
